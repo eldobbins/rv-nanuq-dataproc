@@ -1,3 +1,5 @@
+.DS_Store
+
 # MATLAB and data files
 *.mat
 *.dat
