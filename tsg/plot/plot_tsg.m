@@ -1,32 +1,52 @@
+function plot_tsg(cruise_id)
+%
+% Function to plot maps of colored tracklines from the combined Navigation 
+% and TSG data streams that were created by read_tsg. 
+%
+% Requires that the sea water toolbox be installed (for sw_dens).
+% Requires the m_map tollbox with GSHHRS is installed (for so many).
+% Uses an extracted shoreline from GOA.mat. If change the map bounds or
+%  projection, remove that file so it will recompute.
+% 
+% Code originally from Hank. Adapted by ELD
+% 2021-11-17
+%
+
 close all
-clear
-load nuq_tsg
+indir = sprintf('../data/Level_1/%s', cruise_id);
+pltdir = sprintf('../data/Level_1/%s', cruise_id);
+
+% which plots to make and other config
 plot_cruise_track = 1;
 plot_vars = 1;
 plot_chl = 0;
-dens = sw_dens(salt, temp, 1);
-sz = 20;
-skp = 10;
-%%
-% load chuk_bath
-% load /Users/hstats/Documents/LTER/mapping/AlaskaBathy.mat
+sz = 20;   % size of the markers for scatter plot
+skp = 10;  % points to skip between scatter points
+scrsz = get(0,'ScreenSize');  % size of the figure: full screen
+% map attributes
+lonrng = [-150 -143];
+latrng = [59 61.3];
+proj = 'lambert';
 
+% load the data
+filename = sprintf('%s/%s_TSG.mat', indir, cruise_id);
+load(filename)
+dens = sw_dens(salt, temp, 1);
+
+% load the bathymetry (Seth's AKDEM)
 load ./AlaskaXYZ.mat
 XE = XE - 360;
 ZE = -ZE;
 
-lonrng = [-150 -143];
-latrng = [59 61.3];
-proj = 'lambert';
-scrsz = get(0,'ScreenSize');            %get screensize for full screen figure output
-
-%%
+% Plot just the cruise track
 if plot_cruise_track,
     figure(1);                              %plot onto figure #1
-    set( 1, 'Position', scrsz);
+    set(1, 'Position', scrsz);
     
     m_proj(proj,'lat',latrng,'lon',lonrng);
-    m_gshhs_f('save','GOA.mat')
+    if ~exist('GOA.mat', 'file')
+    	m_gshhs_f('save','GOA.mat')
+    end
     m_usercoast('GOA.mat','patch',[0.7 0.7 0.7]);
     m_grid('xtick', 3,'ytick', 3, 'fontsize', 12)
     hold on
@@ -39,15 +59,22 @@ if plot_cruise_track,
     % h2 = m_plot( gridded.lon(cols(1)), gridded.lat(cols(1)), 'o', 'color', 'k', 'markersize', 4, 'linewidth', 2, 'markerfacecolor', 'g')
     
     m_ruler([0.5 0.8], .1);
-    %     close
-    print('-dpng','-r300','TSG_Cruise_track.png');
+    
+    pltname = sprintf('%s/TSG_Cruise_track.png', pltdir);
+    print('-dpng', '-r300', pltname);
+    close
 end
-%%
-if plot_vars,
-    figure(2);                              %plot onto figure #1
-    set( 2, 'Position', scrsz);
+
+
+if plot_vars
+    
+    % Temperature
+    figure(1);
+    set(1, 'Position', scrsz);
     m_proj(proj,'lat',latrng,'lon',lonrng);
-    % m_gshhs_f('save','GOA.mat')
+    if ~exist('GOA.mat', 'file')
+    	m_gshhs_f('save','GOA.mat')
+    end
     m_usercoast('GOA.mat','patch',[0.7 0.7 0.7]);
     m_grid('xtick', 3,'ytick', 3, 'fontsize', 12)
     hold on
@@ -67,11 +94,12 @@ if plot_vars,
     set( cb, 'fontsize', 12, 'fontweight', 'normal', 'ytick', [6:.5:18])
     ylabel( cb, 'Temperature [\circC]', 'fontsize', 12,'fontname','Times');
     
-    print('-dpng','-r300','TSG_map_temp.png');
-    close
-    %%
-    figure(3);                              %plot onto figure #1
-    set( 3, 'Position', scrsz);
+    pltname = sprintf('%s/TSG_map_temp.png', pltdir);
+    print('-dpng', '-r300', pltname);
+    
+    % Salinity
+    figure(1);
+    set(1, 'Position', scrsz);
     m_proj(proj,'lat',latrng,'lon',lonrng);
     % m_gshhs_f('save','GOA.mat')
     m_usercoast('GOA.mat','patch',[0.7 0.7 0.7]);
@@ -92,11 +120,13 @@ if plot_vars,
     cb = colorbar('Location','SouthOutside');
     set( cb, 'fontsize', 12, 'fontweight', 'normal', 'ytick', [20:1:33])
     ylabel( cb, 'Salinity', 'fontsize', 12,'fontname','Times');
-    print('-dpng','-r300','TSG_map_salt.png');
+
+    pltname = sprintf('%s/TSG_map_salt.png', pltdir);
+    print('-dpng', '-r300', pltname);
     
-    %%
-    figure(4);                              %plot onto figure #1
-    set( 4, 'Position', scrsz);
+    % Density
+    figure(1);
+    set(1, 'Position', scrsz);
     m_proj(proj,'lat',latrng,'lon',lonrng);
     % m_gshhs_f('save','GOA.mat')
     m_usercoast('GOA.mat','patch',[0.7 0.7 0.7]);
@@ -117,9 +147,12 @@ if plot_vars,
     cb = colorbar('Location','SouthOutside');
     set( cb, 'fontsize', 12, 'fontweight', 'normal', 'ytick', [8:1:25])
     ylabel( cb, 'Sigma-T', 'fontsize', 12,'fontname','Times');
-    print('-dpng','-r300','TSG_map_dens.png');
+    
+    pltname = sprintf('%s/TSG_map_dens.png', pltdir);
+    print('-dpng', '-r300', pltname);
 end
-%%
+
+% ECO Triplet
 if plot_chl,
     st = datenum(2020,7,26);
     nd = datenum(2020,8,10);
