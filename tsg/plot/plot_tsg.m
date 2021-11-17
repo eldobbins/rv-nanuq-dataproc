@@ -11,7 +11,7 @@ skp = 10;
 % load chuk_bath
 % load /Users/hstats/Documents/LTER/mapping/AlaskaBathy.mat
 
-load /Users/hstats/Documents/LTER/mapping/AlaskaXYZ.mat
+load ./AlaskaXYZ.mat
 XE = XE - 360;
 ZE = -ZE;
 
@@ -22,23 +22,23 @@ scrsz = get(0,'ScreenSize');            %get screensize for full screen figure o
 
 %%
 if plot_cruise_track,
-%     figure(1);                              %plot onto figure #1
-%     set( 1, 'Position', scrsz);
-%     
-%     m_proj(proj,'lat',latrng,'lon',lonrng);
-%     %m_gshhs_f('save','GOA.mat')
-%     m_usercoast('GOA.mat','patch',[0.7 0.7 0.7]);
-%     m_grid('xtick', 3,'ytick', 3, 'fontsize', 12)
-%     hold on
-%     [cs,h] = m_contour(XE,YE,ZE,[20 30 40 50 60 100 150 200 300 500 1000 2000 3000],'color',[.6 .6 .6]);
-%     %clabel(cs,h,'fontsize',6);
-%     %clabel(cs,h,'LabelSpacing',72,'Color','b','FontWeight','bold')
-%     set(h,'linewidth',.7)
-%     
-%     h1 = m_plot( lon, lat, '.', 'color', 'r', 'linewidth', 2); hold on
-%     % h2 = m_plot( gridded.lon(cols(1)), gridded.lat(cols(1)), 'o', 'color', 'k', 'markersize', 4, 'linewidth', 2, 'markerfacecolor', 'g')
-%     
-%     m_ruler([0.5 0.8], .1);
+    figure(1);                              %plot onto figure #1
+    set( 1, 'Position', scrsz);
+    
+    m_proj(proj,'lat',latrng,'lon',lonrng);
+    m_gshhs_f('save','GOA.mat')
+    m_usercoast('GOA.mat','patch',[0.7 0.7 0.7]);
+    m_grid('xtick', 3,'ytick', 3, 'fontsize', 12)
+    hold on
+    [cs,h] = m_contour(XE,YE,ZE,[20 30 40 50 60 100 150 200 300 500 1000 2000 3000],'color',[.6 .6 .6]);
+    %clabel(cs,h,'fontsize',6);
+    %clabel(cs,h,'LabelSpacing',72,'Color','b','FontWeight','bold')
+    set(h,'linewidth',.7)
+    
+    h1 = m_plot( lon, lat, '.', 'color', 'r', 'linewidth', 2); hold on
+    % h2 = m_plot( gridded.lon(cols(1)), gridded.lat(cols(1)), 'o', 'color', 'k', 'markersize', 4, 'linewidth', 2, 'markerfacecolor', 'g')
+    
+    m_ruler([0.5 0.8], .1);
     %     close
     print('-dpng','-r300','TSG_Cruise_track.png');
 end
