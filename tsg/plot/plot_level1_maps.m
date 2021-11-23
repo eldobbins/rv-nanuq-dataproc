@@ -1,4 +1,4 @@
-function plot_tsg(cruise_id)
+function plot_level1_maps(cruise_id)
 %
 % Function to plot maps of colored tracklines from the combined Navigation 
 % and TSG data streams that were created by read_tsg. 
@@ -14,7 +14,7 @@ function plot_tsg(cruise_id)
 
 close all
 indir = sprintf('../data/Level_1/%s', cruise_id);
-pltdir = sprintf('../data/Level_1/%s', cruise_id);
+pltdir = indir;
 
 % which plots to make and other config
 plot_cruise_track = 1;
@@ -23,14 +23,21 @@ plot_chl = 0;
 sz = 20;   % size of the markers for scatter plot
 skp = 10;  % points to skip between scatter points
 scrsz = get(0,'ScreenSize');  % size of the figure: full screen
-% map attributes
-lonrng = [-150 -143];
-latrng = [59 61.3];
-proj = 'lambert';
 
 % load the data
-filename = sprintf('%s/%s_TSG.mat', indir, cruise_id);
+filename = sprintf('%s/uaf_%s_TSG_L1_v1.mat', indir, ...
+    replace(cruise_id, '_all', ''));
 load(filename)
+
+% subset the data
+if strcmp(cruise_id, 'NUQ202003S_all')
+    ens = find(jd > datenum(2020,7,27));
+    jd = jd(ens);
+    temp = temp(ens);
+    salt = salt(ens);
+    lat = lat(ens);
+    lon = lon(ens);
+end
 dens = sw_dens(salt, temp, 1);
 
 % load the bathymetry (Seth's AKDEM)
@@ -38,19 +45,31 @@ load ./AlaskaXYZ.mat
 XE = XE - 360;
 ZE = -ZE;
 
+% map attributes
+proj = 'lambert';
+if max(lon) > -148;  % Went to Prince William Sound
+    lonrng = [-150 -143];
+    latrng = [59 61.3];
+else
+    lonrng = [-150 -148];
+    latrng = [59.5 60.5];
+end    
+
 % Plot just the cruise track
 if plot_cruise_track,
     figure(1);                              %plot onto figure #1
     set(1, 'Position', scrsz);
     
-    m_proj(proj,'lat',latrng,'lon',lonrng);
+    m_proj(proj, 'lat', latrng, 'lon', lonrng);
     if ~exist('GOA.mat', 'file')
     	m_gshhs_f('save','GOA.mat')
     end
-    m_usercoast('GOA.mat','patch',[0.7 0.7 0.7]);
-    m_grid('xtick', 3,'ytick', 3, 'fontsize', 12)
+    m_usercoast('GOA.mat', 'patch', [0.7 0.7 0.7]);
+    m_grid('xtick', 3, 'ytick', 3, 'fontsize', 12)
     hold on
-    [cs,h] = m_contour(XE,YE,ZE,[20 30 40 50 60 100 150 200 300 500 1000 2000 3000],'color',[.6 .6 .6]);
+    [cs,h] = m_contour(XE, YE, ZE, ...
+        [20 30 40 50 60 100 150 200 300 500 1000 2000 3000], ...
+        'color', [.6 .6 .6]);
     %clabel(cs,h,'fontsize',6);
     %clabel(cs,h,'LabelSpacing',72,'Color','b','FontWeight','bold')
     set(h,'linewidth',.7)
