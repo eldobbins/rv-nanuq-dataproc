@@ -50,4 +50,7 @@ lon = tlon(ind);
 
 % Save to the output file.  Combining data migrates it from Level 0 to
 % Level 1 since it is manipulated.
+if ~exist(outdir, 'dir')
+    mkdir(outdir)
+end
 save(outfile, 'jd', 'lat', 'lon', 'temp', 'cond', 'salt');
