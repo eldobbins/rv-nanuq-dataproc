@@ -21,18 +21,18 @@ tday = datenum(tsg(:,1),tsg(:,2),tsg(:,3),tsg(:,4),tsg(:,5),tsg(:,6));
 temp = tsg(:,7);
 cond = tsg(:,8);
 salt = tsg(:,9);
-sv = tsg(:,10);
+sv = tsg(:,10);  % but don't save speed of sound
 
 filename = sprintf('%s/uaf_%s_NAV_L0_v1.dat', indir, cruise_id);
 nav = load(filename);
 nday = datenum(nav(:,1),nav(:,2),nav(:,3),nav(:,4),nav(:,5),nav(:,6));
 nlat = nav(:,7)+nav(:,8)./60;
 nlon = -(nav(:,9)+nav(:,10)./60);
-ndep = nav(:,11);
+ndep = nav(:,11);  % but don't save bottom depth or the other nav variables
 
 % Identify the navigation points closest to the TSG points in time.
 % No interpolation needed because Nav is at high resolution.
-for in = 1:length(tday),
+for in = 1:length(tday)
     ind = near(nday,tday(in),1);
     tlat(in) = nlat(ind);
     tlon(in) = nlon(ind);
