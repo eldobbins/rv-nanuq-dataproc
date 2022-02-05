@@ -47,7 +47,7 @@ cruise_id=NUQ202003S
 #
 
 # add a header
-echo "#Year Month Day Hour Minute Second Lat_Deg Lat_Min Lon_Deg Lon_Min Heading COG SOG" > ${dir}/${outfile}
+echo "#Year Month Day Hour Minute Second Lat_Deg Lat_Min Lon_Deg Lon_Min Depth Heading COG SOG" > ${dir}/${outfile}
 
 # add the data without header lines
 sed '/#/d' nuq_nav.dat >> ${dir}/${outfile}

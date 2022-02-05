@@ -31,7 +31,7 @@ outfile=${outdir}/uaf_${cruise_id}_NAV_L0_v2.dat
 #
 
 # add a header
-echo "#Year Month Day Hour Minute Second Lat_Deg Lat_Min Lon_Deg Lon_Min Heading COG SOG" > ${outfile}
+echo "#Year Month Day Hour Minute Second Lat_Deg Lat_Min Lon_Deg Lon_Min Depth Heading COG SOG" > ${outfile}
 
 # parse each incoming Navigation file and add it to the outgoing file
 for file in ${indir}/nav.*;
