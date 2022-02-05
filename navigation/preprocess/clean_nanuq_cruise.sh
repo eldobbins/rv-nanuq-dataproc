@@ -13,16 +13,22 @@
 # Original code developed by Hank Statscewich
 #
 
+#
+# Set up
+#
+
 cruise_id=$1
 
 indir=../../data/Navigation/Level_0/${cruise_id}
 outdir=../../data/Navigation/Level_0_v2
 
-
 # remove previous work if it exists
 outfile=${outdir}/uaf_${cruise_id}_NAV_L0_v2.dat
 \rm ${outfile}
 
+#
+# Write data from the little files into a single file
+#
 
 # add a header
 echo "#Year Month Day Hour Minute Second Lat_Deg Lat_Min Lon_Deg Lon_Min Heading COG SOG" > ${outfile}
