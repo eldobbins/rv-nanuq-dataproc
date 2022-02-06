@@ -3,7 +3,7 @@
 
 R/V Nunuq is a small research vessel belonging to the College of Fisheries and Ocean Sciences at
 the University of Alaska Fairbanks. She is equiped with scientific instrumentation and makes regular
-trips through Resurection Bay to sample water quality parameters at stations GAK1, GAKOA, and Res2.5.
+trips through Resurrection Bay to sample water quality parameters at stations GAK1, GAKOA, and Res2.5.
 These data should be easy to process and integrate into existing projects, so this repository was created.
 
 ### Requirements
