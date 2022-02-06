@@ -61,9 +61,15 @@ Use:
 > ./clean_NUQ202003S_Nav.sh    # this cruise was split between several cruise ids. This joins them
 ```
 
+If in the future, just a single cruise needs to be processed, you can use
+```
+> ./clean_nanuq_cruise.sh {cruise_id}
+```
+Assuming, of course, that the data have been added to the directory structure described above.
+
 ## Processing
 
-This is a single script that performs some very basic clean-up on Navigation files:
+This is a single script that performs some very basic clean-up on all the Navigation files:
 
 1. remove lat = lon = 0, and depth and speed too
 2. sort time and remove duplicate timesteps
@@ -77,6 +83,6 @@ station, but if that needs more clean-up, I will do it later.
 ## Plotting
 
 There are 2 plotting scripts: one for raw data and one for the clean-up verions. They make maps and timeseries. 
-The plots of clean data (Level 1) are saved.
+The plots of clean data (Level 1) are saved.  Both scripts run on all the available data files.
 
-Feb 6, 2022
+*Feb 6, 2022*
