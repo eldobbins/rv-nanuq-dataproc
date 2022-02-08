@@ -37,4 +37,3 @@ for file in ${indir}/tsg.*;
 		echo "$file";
 		./tsg_parse.awk $file >> ${outfile}
 	done
-
