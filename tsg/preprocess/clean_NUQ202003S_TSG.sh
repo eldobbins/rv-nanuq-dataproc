@@ -1,32 +1,56 @@
 #!/bin/sh
+#
+# There is one cruise that had files split between multiple directories with
+# multiple cruise names. It will be nicer to copy those all to a single file. Once
+# done, the original cruises are stashed in a subdirectory.
+#
+# Remember that all the original files have headers, so those need to be stripped off.
+#
+# ELD
+# 2/4/2022
+#
 
-# cleanup from prior runs
-rm nuq_nav.dat nuq_tsg.dat
+#
+# Set up
+#
 
+dir=../../data/TSG/Level_0_v2
+# make up a new cruise id
+outfile=uaf_NUQ202003Sall_TSG_L0_v2.dat
 
-# loop through all the files and cut out just the best parts for Cruise NUQ202003S
-# (three different directories are involved)
+# cleanup from prior runs - remove the temporary file
+\rm nuq_tsg.dat
 
+#
+# Process the 3 cruises and copy output to a single file
+#
 
 cruise_id=NUQ202001P
-./clean_nanuk_cruise.sh $cruise_id
-\cp ../data/Level_0/$cruise_id/uaf_${cruise_id}_TSG_L0_v1.dat nuq_tsg.dat
-\cp ../data/Level_0/$cruise_id/uaf_${cruise_id}_NAV_L0_v1.dat nuq_nav.dat
+./clean_nanuq_cruise.sh $cruise_id
+\cp ${dir}/uaf_${cruise_id}_TSG_L0_v2.dat nuq_tsg.dat
+\mv -f ${dir}/uaf_${cruise_id}_TSG_L0_v2.dat ${dir}/separate_originals
 
 
 cruise_id=NUG202003S	
-./clean_nanuk_cruise.sh $cruise_id
-\cat ../data/Level_0/$cruise_id/uaf_${cruise_id}_TSG_L0_v1.dat >> nuq_tsg.dat
-\cat ../data/Level_0/$cruise_id/uaf_${cruise_id}_NAV_L0_v1.dat >> nuq_nav.dat
+./clean_nanuq_cruise.sh $cruise_id
+\cat ${dir}/uaf_${cruise_id}_TSG_L0_v2.dat >> nuq_tsg.dat
+\mv -f ${dir}/uaf_${cruise_id}_TSG_L0_v2.dat ${dir}/separate_originals
 
 
 cruise_id=NUQ202003S	
-./clean_nanuk_cruise.sh $cruise_id
-\cat ../data/Level_0/$cruise_id/uaf_${cruise_id}_TSG_L0_v1.dat >> nuq_tsg.dat
-\cat ../data/Level_0/$cruise_id/uaf_${cruise_id}_NAV_L0_v1.dat >> nuq_nav.dat
+./clean_nanuq_cruise.sh $cruise_id
+\cat ${dir}/uaf_${cruise_id}_TSG_L0_v2.dat >> nuq_tsg.dat
+\mv -f ${dir}/uaf_${cruise_id}_TSG_L0_v2.dat ${dir}/separate_originals
 
-
+#
 # make a single cruise that is data from all three previously defined
-cruise_id=NUQ202003S_all	
-\mv nuq_tsg.dat ../data/Level_0/$cruise_id/uaf_${cruise_id}_TSG_L0_v1.dat
-\mv nuq_nav.dat ../data/Level_0/$cruise_id/uaf_${cruise_id}_NAV_L0_v1.dat
+#
+
+# add a header
+echo "#Year Month Day Hour Minute Second Temperature Conductivity Salinity Sound_Velocity" > ${dir}/${outfile}
+
+# add the data without header lines
+sed '/#/d' nuq_tsg.dat >> ${dir}/${outfile}
+
+# clean up
+\rm nuq_tsg.dat
