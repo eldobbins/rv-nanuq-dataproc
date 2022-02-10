@@ -13,7 +13,7 @@ function plot_level1_maps(cruise_id)
 %
 
 close all
-indir = sprintf('../data/Level_1/%s', cruise_id);
+indir = sprintf('../../data/TSG/Level_1', cruise_id);
 pltdir = indir;
 
 % which plots to make and other config
@@ -28,6 +28,9 @@ scrsz = get(0,'ScreenSize');  % size of the figure: full screen
 filename = sprintf('%s/uaf_%s_TSG_L1_v1.mat', indir, ...
     replace(cruise_id, '_all', ''));
 load(filename)
+salt = salinity;
+temp = temperature;
+
 
 % subset the data
 if strcmp(cruise_id, 'NUQ202003S_all')
