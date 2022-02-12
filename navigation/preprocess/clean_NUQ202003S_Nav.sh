@@ -16,7 +16,7 @@
 
 dir=../../data/Navigation/Level_0_v2
 # make up a new cruise id
-outfile=uaf_NUQ202003Sall_NAV_L0_v2.dat
+outfile=uaf_NUQ202003S_NAV_L0_v2.dat
 
 # cleanup from prior runs - remove the temporary file
 \rm nuq_nav.dat
