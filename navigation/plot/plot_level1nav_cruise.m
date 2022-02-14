@@ -1,4 +1,4 @@
-function plot_level0nav(input_string, indir)
+function plot_level1nav(input_string, indir)
 %
 % Function to plot the cleaned-up navigation data stored in a cruise's .mat 
 % file

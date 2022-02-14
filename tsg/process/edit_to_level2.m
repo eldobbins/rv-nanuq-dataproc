@@ -17,6 +17,8 @@ function edata = edit_to_level2(cruise_id)
 % ELD
 % 2021-11-29
 %
+% 2/13/2022 Decided the data is clean enough to avoid hand editting.
+%
 
 addpath('~/matlab/timeplt');    % for gregaxd
 
