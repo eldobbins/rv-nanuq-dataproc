@@ -118,3 +118,23 @@ datetick('x', 'mm-dd HH:MM', 'keeplimits')
 pltname = replace(name, '.mat', '_timeseries.png');
 pltname = sprintf('%s/%s', pltdir, pltname);
 print('-dpng', '-r300', pltname);
+
+%
+% Make the TS plot (instead of timeseries?)
+%
+
+figure(3)
+clf
+
+scatter(salinity, temperature, 20, sog, 'filled')
+ylabel('Temperture');
+xlabel('Salinity');
+title(name, 'Interpreter', 'None');
+c = colorbar;
+c.Label.String = 'Speed over Ground';
+grid;
+
+pltname = replace(name, '.mat', '_ts.png');
+pltname = sprintf('%s/%s', pltdir, pltname);
+print('-dpng', '-r300', pltname);
+
